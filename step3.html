@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Birthday Surprise 🎁</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="step3-page">
+
+    <!-- Floating Hearts -->
+
+    <div class="floating-hearts">
+
+        <span>❤️</span>
+        <span>💖</span>
+        <span>💕</span>
+        <span>💗</span>
+        <span>✨</span>
+        <span>💞</span>
+        <span>🌸</span>
+
+    </div>
+
+
+    <!-- Main Content -->
+
+    <div class="reveal-container">
+
+        <p class="little-text">
+            ✨ One More Thing... ✨
+        </p>
+
+        <h1>
+            I Have Something<br>
+            Special For You
+        </h1>
+
+        <p class="reveal-subtitle">
+            But first... you have to open it. 💕
+        </p>
+
+
+        <!-- Gift -->
+
+        <div class="gift-wrapper" id="gift">
+
+            <div class="gift">
+
+                <div class="gift-lid"></div>
+
+                <div class="gift-box">
+
+                    <div class="vertical-ribbon"></div>
+
+                    <div class="horizontal-ribbon"></div>
+
+                </div>
+
+                <div class="bow">
+
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button id="openGift">
+            🎁 Open Your Surprise
+        </button>
+
+
+        <!-- Birthday Message -->
+
+        <div class="birthday-message" id="birthdayMessage">
+
+            <div class="confetti-text">
+                🎉 🎊 🎉
+            </div>
+
+            <h2>
+                Happy Birthday
+            </h2>
+
+            <h3>
+                My Beautiful Birthday Queen 👑
+            </h3>
+
+            <p>
+                Today isn't just another day...
+            </p>
+
+            <p>
+                It's the day someone incredibly special
+                came into this world. ❤️
+            </p>
+
+            <div class="heart">
+                💗
+            </div>
+
+            <a href="step4.html">
+
+                <button class="continue-btn">
+                    Continue The Surprise ✨
+                </button>
+
+            </a>
+
+        </div>
+
+    </div>
+    <script>
+    const gift = document.getElementById("gift");
+    const openGift = document.getElementById("openGift");
+    const birthdayMessage = document.getElementById("birthdayMessage");
+
+    openGift.addEventListener("click", function () {
+
+        // Gift open animation
+        gift.classList.add("open");
+
+        // Button hide
+        openGift.style.display = "none";
+
+        // Wait for animation
+        setTimeout(function () {
+
+            gift.style.display = "none";
+
+            birthdayMessage.classList.add("show");
+
+            createConfetti();
+
+        }, 800);
+
+    });
+
+
+    function createConfetti() {
+
+        const symbols = [
+            "🎉",
+            "🎊",
+            "✨",
+            "💖",
+            "💕",
+            "🌸"
+        ];
+
+        for (let i = 0; i < 40; i++) {
+
+            const confetti = document.createElement("div");
+
+            confetti.innerHTML =
+                symbols[Math.floor(Math.random() * symbols.length)];
+
+            confetti.style.position = "fixed";
+            confetti.style.left = Math.random() * 100 + "vw";
+            confetti.style.top = "-50px";
+            confetti.style.fontSize =
+                Math.random() * 20 + 15 + "px";
+
+            confetti.style.zIndex = "1000";
+            confetti.style.pointerEvents = "none";
+
+            const duration = Math.random() * 3 + 2;
+
+            confetti.style.animation =
+                `confettiFall ${duration}s linear`;
+
+            document.body.appendChild(confetti);
+
+            setTimeout(function () {
+                confetti.remove();
+            }, duration * 1000);
+        }
+    }
+</script>
+
+</body>
+</html>
+
+</body>
+
+</html>
