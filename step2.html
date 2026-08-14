@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Your Beautiful Journey ❤️</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffd6e7,
+                    #fff1f7,
+                    #eadcff
+                );
+
+            color: #555;
+
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .gallery-page {
+            min-height: 100vh;
+            padding: 45px 0 60px;
+        }
+
+
+        .gallery-container {
+            width: 92%;
+            max-width: 1100px;
+            margin: auto;
+            text-align: center;
+        }
+
+
+        /* =========================
+           HEADING
+        ========================= */
+
+        .gallery-container h1 {
+            font-family: Georgia, serif;
+
+            font-size: clamp(
+                32px,
+                6vw,
+                55px
+            );
+
+            color: #ff397c;
+
+            margin-bottom: 12px;
+        }
+
+
+        .subtitle {
+            font-size: 16px;
+            line-height: 1.7;
+
+            color: #666;
+
+            margin-bottom: 35px;
+        }
+
+
+        .subtitle span {
+            color: #ff397c;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           SWIPE MESSAGE
+        ========================= */
+
+        .swipe-message {
+            display: inline-block;
+
+            background: rgba(255,255,255,.7);
+
+            padding: 10px 20px;
+
+            border-radius: 30px;
+
+            color: #a65a91;
+
+            font-size: 14px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           GALLERY
+        ========================= */
+
+        .gallery {
+            width: 100%;
+
+            overflow-x: auto;
+            overflow-y: hidden;
+
+            padding: 20px 5px 35px;
+
+            scroll-snap-type: x mandatory;
+
+            -webkit-overflow-scrolling: touch;
+
+            scrollbar-width: thin;
+        }
+
+
+        /* Chrome / Edge scrollbar */
+
+        .gallery::-webkit-scrollbar {
+            height: 7px;
+        }
+
+
+        .gallery::-webkit-scrollbar-track {
+            background: rgba(255,255,255,.5);
+
+            border-radius: 20px;
+        }
+
+
+        .gallery::-webkit-scrollbar-thumb {
+            background: #ff7eaa;
+
+            border-radius: 20px;
+        }
+
+
+        /* =========================
+           TRACK
+        ========================= */
+
+        .gallery-track {
+
+            display: flex;
+
+            gap: 22px;
+
+            width: max-content;
+
+            padding: 5px 5px;
+        }
+
+
+        /* =========================
+           PHOTO CARD
+        ========================= */
+
+        .card {
+
+            flex: 0 0 270px;
+
+            scroll-snap-align: center;
+
+            background: white;
+
+            padding: 12px;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 12px 30px
+                rgba(0,0,0,.13);
+
+            transform: rotate(-2deg);
+
+            transition:
+                transform .3s ease,
+                box-shadow .3s ease;
+
+            cursor: pointer;
+        }
+
+
+        .card:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+
+        .card:hover {
+
+            transform:
+                translateY(-8px)
+                rotate(0deg)
+                scale(1.02);
+
+            box-shadow:
+                0 18px 40px
+                rgba(0,0,0,.18);
+        }
+
+
+        .card img {
+
+            display: block;
+
+            width: 100%;
+
+            height: 330px;
+
+            object-fit: cover;
+
+            border-radius: 14px;
+        }
+
+
+        .card h3 {
+
+            font-family: Georgia, serif;
+
+            font-size: 21px;
+
+            color: #ff397c;
+
+            padding: 15px 5px 8px;
+        }
+
+
+        /* =========================
+           BOTTOM BUTTON
+        ========================= */
+
+        .bottom-section {
+
+            text-align: center;
+
+            margin-top: 35px;
+        }
+
+
+        .bottom-text {
+
+            color: #777;
+
+            font-size: 15px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .next-button {
+
+            display: inline-block;
+
+            text-decoration: none;
+
+            background: #ff4081;
+
+            color: white;
+
+            padding: 15px 30px;
+
+            border-radius: 50px;
+
+            font-size: 16px;
+
+            box-shadow:
+                0 10px 25px
+                rgba(255,64,129,.3);
+
+            transition: .3s;
+        }
+
+
+        .next-button:hover {
+
+            transform: scale(1.06);
+
+        }
+
+
+        /* =========================
+           POPUP
+        ========================= */
+
+        .popup {
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,.85);
+
+            display: none;
+
+            justify-content: center;
+
+            align-items: center;
+
+            flex-direction: column;
+
+            padding: 20px;
+
+            z-index: 9999;
+        }
+
+
+        .popup.show {
+            display: flex;
+        }
+
+
+        .popup img {
+
+            max-width: 92vw;
+
+            max-height: 75vh;
+
+            object-fit: contain;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,.4);
+        }
+
+
+        .popup-text {
+
+            color: white;
+
+            font-size: 20px;
+
+            margin-top: 18px;
+
+            text-align: center;
+        }
+
+
+        .close-popup {
+
+            position: absolute;
+
+            top: 20px;
+            right: 25px;
+
+            width: 45px;
+            height: 45px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: white;
+
+            color: #ff397c;
+
+            font-size: 25px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .gallery-page {
+                padding-top: 35px;
+            }
+
+
+            .gallery-container {
+                width: 94%;
+            }
+
+
+            .gallery-container h1 {
+                font-size: 38px;
+            }
+
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+
+            .swipe-message {
+                font-size: 13px;
+
+                padding:
+                    9px 16px;
+            }
+
+
+            .gallery {
+
+                width: 100vw;
+
+                margin-left: -3vw;
+
+                padding-left: 18px;
+                padding-right: 18px;
+
+                scroll-snap-type: x mandatory;
+            }
+
+
+            .gallery-track {
+                gap: 18px;
+            }
+
+
+            .card {
+
+                flex: 0 0 78vw;
+
+                max-width: 310px;
+
+                transform: rotate(-1deg);
+            }
+
+
+            .card:nth-child(even) {
+                transform: rotate(1deg);
+            }
+
+
+            .card img {
+
+                height: 390px;
+            }
+
+
+            .card h3 {
+                font-size: 20px;
+            }
+
+
+            .bottom-section {
+                margin-top: 25px;
+            }
+
+
+            .next-button {
+
+                padding:
+                    14px 25px;
+
+                font-size: 15px;
+            }
+
+        }
+
+
+        /* Small phones */
+
+        @media (max-width: 380px) {
+
+            .card {
+                flex: 0 0 82vw;
+            }
+
+
+            .card img {
+                height: 350px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="gallery-page">
+
+
+    <div class="gallery-container">
+
+
+        <!-- HEADING -->
+
+        <h1>
+            Your Beautiful Journey 💗
+        </h1>
+
+
+        <p class="subtitle">
+
+            Every picture tells a story,
+            <br>
+
+            and every story has you in it.
+            <span>❤️</span>
+
+        </p>
+
+
+        <!-- SWIPE INSTRUCTION -->
+
+        <div class="swipe-message">
+
+            👆 Swipe left & right to see your memories
+
+        </div>
+
+
+        <!-- =========================
+             GALLERY
+        ========================= -->
+
+        <div class="gallery" id="gallery">
+
+            <div class="gallery-track">
+
+
+                <!-- PHOTO 1 -->
+
+                <div class="card"
+                     onclick="openPhoto(
+                     'IMG-20260814-WA0016.jpg',
+                     'Your Smile ✨'
+                     )">
+
+                    <img
+                        src="IMG-20260814-WA0016.jpg"
+                        alt="Your Smile">
+
+                    <h3>
+                        Your Smile ✨
+                    </h3>
+
+                </div>
+
+
+                <!-- PHOTO 2 -->
+
+                <div class="card"
+                     onclick="openPhoto(
+                     'IMG-20260814-WA0007.jpg',
+                     'Beautiful Soul 💕'
+                     )">
+
+                    <img
+                        src="IMG-20260814-WA0007.jpg"
+                        alt="Beautiful Soul">
+
+                    <h3>
+                        Beautiful Soul 💕
+                    </h3>
+
+                </div>
+
+
+                <!-- PHOTO 3 -->
+
+                <div class="card"
+                     onclick="openPhoto(
+                     'IMG-20260814-WA0025.jpg',
+                     'Crazy Moments 😂'
+                     )">
+
+                    <img
+                        src="IMG-20260814-WA0025.jpg"
+                        alt="Crazy Moments">
+
+                    <h3>
+                        Crazy Moments 😂
+                    </h3>
+
+                </div>
+
+
+                <!-- PHOTO 4 -->
+
+                <div class="card"
+                     onclick="openPhoto(
+                     'IMG-20260814-WA0019.jpg',
+                     'Always Cute 🌸'
+                     )">
+
+                    <img
+                        src="IMG-20260814-WA0019.jpg"
+                        alt="Always Cute">
+
+                    <h3>
+                        Always Cute 🌸
+                    </h3>
+
+                </div>
+
+
+                <!-- PHOTO 5 -->
+
+                <div class="card"
+                     onclick="openPhoto(
+                     'IMG-20260814-WA0018.jpg',
+                     'Favourite Photo 💗'
+                     )">
+
+                    <img
+                        src="IMG-20260814-WA0018.jpg"
+                        alt="Favourite Photo">
+
+                    <h3>
+                        Favourite Photo 💗
+                    </h3>
+
+                </div>
+
+
+                <!-- PHOTO 6 -->
+
+                <div class="card"
+                     onclick="openPhoto(
+                     'IMG-20260814-WA0025.jpg',
+                     'Forever Memories 🥹'
+                     )">
+
+                    <img
+                        src="IMG-20260814-WA0025.jpg"
+                        alt="Forever Memories">
+
+                    <h3>
+                        Forever Memories 🥹
+                    </h3>
+
+                </div>
+
+
+                <!-- PHOTO 7 -->
+
+                <div class="card"
+                     onclick="openPhoto(
+                     'IMG-20260814-WA0009.jpg',
+                     'Golden Days 🌸'
+                     )">
+
+                    <img
+                        src="IMG-20260814-WA0009.jpg"
+                        alt="Golden Days">
+
+                    <h3>
+                        Golden Days 🌸
+                    </h3>
+
+                </div>
+
+
+                <!-- PHOTO 8 -->
+
+                <div class="card"
+                     onclick="openPhoto(
+                     'IMG-20260814-WA0014.jpg',
+                     'Birthday Girl 👑'
+                     )">
+
+                    <img
+                        src="IMG-20260814-WA0014.jpg"
+                        alt="Birthday Girl">
+
+                    <h3>
+                        Birthday Girl 👑
+                    </h3>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             BOTTOM
+        ========================= -->
+
+        <div class="bottom-section">
+
+            <p class="bottom-text">
+
+                ✨ These are just a few of the
+                many memories worth keeping. ✨
+
+            </p>
+
+
+            <a
+                href="step3.html"
+                class="next-button">
+
+                Continue Our Journey 💕 →
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     POPUP
+========================= -->
+
+<div
+    class="popup"
+    id="popup"
+    onclick="closePhoto(event)"
+>
+
+
+    <button
+        class="close-popup"
+        onclick="closePhoto()">
+
+        ×
+
+    </button>
+
+
+    <img
+        id="popupImage"
+        src=""
+        alt="Memory">
+
+
+    <p
+        class="popup-text"
+        id="popupText">
+
+    </p>
+
+
+</div>
+
+
+<script>
+
+    function openPhoto(image, text) {
+
+        document.getElementById(
+            "popupImage"
+        ).src = image;
+
+
+        document.getElementById(
+            "popupText"
+        ).textContent = text;
+
+
+        document.getElementById(
+            "popup"
+        ).classList.add("show");
+
+    }
+
+
+    function closePhoto(event) {
+
+        if (
+            event &&
+            event.target.id !== "popup"
+        ) {
+            return;
+        }
+
+
+        document.getElementById(
+            "popup"
+        ).classList.remove("show");
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Escape") {
+
+                document.getElementById(
+                    "popup"
+                ).classList.remove("show");
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
